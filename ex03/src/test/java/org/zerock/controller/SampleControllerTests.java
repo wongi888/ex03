@@ -49,7 +49,8 @@ public class SampleControllerTests {
 	
 	@Test
 	public void testXML()throws Exception{
-		
+	
+		log.info("testXML DATA");
 		
 		String xmlStr = 
 				mockMvc.perform(get("/sample/getList.xml"))
