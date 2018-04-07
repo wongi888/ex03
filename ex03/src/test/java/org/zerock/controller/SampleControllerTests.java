@@ -48,7 +48,7 @@ public class SampleControllerTests {
 	
 	
 	@Test
-	public void testJSON()throws Exception{
+	public void testXML()throws Exception{
 		
 		
 		String xmlStr = 
