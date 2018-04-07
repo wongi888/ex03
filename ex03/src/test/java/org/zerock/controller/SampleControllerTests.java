@@ -1,5 +1,6 @@
 package org.zerock.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,6 +46,19 @@ public class SampleControllerTests {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(ctx).build();
 	}
 	
+	
+	@Test
+	public void testJSON()throws Exception{
+		
+		
+		String xmlStr = 
+				mockMvc.perform(get("/sample/getList.xml"))
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+	
+		log.info("XML : " + xmlStr);
+	}
 	
 	
 
