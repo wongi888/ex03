@@ -14,10 +14,12 @@ public interface ReplyMapper {
 
 	public int delete(Long bno);
 
-	public int update(ReplyVO board);
+	public int update(ReplyVO reply);
 
 	public List<ReplyVO> getListWithPaging(
 			@Param("cri") Criteria cri, 
 			@Param("bno") Long bno);
 
 }
+
+
