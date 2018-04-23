@@ -22,8 +22,11 @@
 			value="jdbc:log4jdbc:oracle:thin:@localhost:1521:XE"></property>
 			 -->
 			 
-		<property name="jdbcUrl"
+		<!-- <property name="jdbcUrl"
 			value="jdbc:log4jdbc:oracle:thin:@192.168.0.4:1521:XE"></property>	 
+		 -->
+		 <property name="jdbcUrl"
+			value="jdbc:log4jdbc:oracle:thin:@localhost:1521:XE"></property>	 
 			
 		<property name="username" value="book_ex"></property>
 		<property name="password" value="book_ex"></property>
