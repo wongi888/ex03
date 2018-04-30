@@ -99,7 +99,7 @@
       
         <ul class="chat">
           <!--  start reply -->
-          <li class="left clearfix" data-rno='12'>
+<!--           <li class="left clearfix" data-rno='12'>
             <div>
               <div class="header">
                 <strong class="primary-font">user00</strong> 
@@ -108,7 +108,7 @@
               <p>Good job!</p>
             </div>
           </li>
-          <!-- end reply -->
+ -->          <!-- end reply -->
         </ul>
         <!-- ./ end ul -->
       </div>
