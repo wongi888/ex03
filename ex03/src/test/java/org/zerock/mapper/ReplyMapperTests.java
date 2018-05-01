@@ -92,7 +92,10 @@ public class ReplyMapperTests {
 		Criteria cri = new Criteria(2,10);
 		
 		//2359299L
-		List<ReplyVO> replies = mapper.getListWithPaging(cri, bnoArr[0]);
+		//List<ReplyVO> replies = mapper.getListWithPaging(cri, bnoArr[0]);
+		
+		//1310720
+		List<ReplyVO> replies = mapper.getListWithPaging(cri, 1310718L);
 		
 		replies.forEach(reply -> log.info(reply));
 		

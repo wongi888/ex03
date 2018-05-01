@@ -178,12 +178,16 @@ $(document).ready(function () {
 		  var liHeight = liObj.outerHeight() + parseInt(liObj.css("margin-bottom")) ; 
 		  
 		  var liCount = liObj.length;
+		  
+		  
 
 		  var maxHeight = (liCount * liHeight) ;
 		    
 		  var currentScroll = chatObj.height() + chatObj.scrollTop() ;
 		  
 		  if (maxHeight  <= currentScroll   ) {
+			  
+			console.log("liCount: " + liCount);
 		    
 		    console.log("Scroll End");
 		    
@@ -220,8 +224,7 @@ $(document).ready(function () {
 	    }else {
 	        replyUL.append(str);
 	    }
-
-	
+	    
 	    });//end function
 	    
 	 }//end showList

@@ -41,7 +41,7 @@ public class LogAdvice {
 	
 	}
 	
-	@Around("execution(* org.zerock.service.*Service*.*(..))")
+	@Around("execution(* org.zerock.service.SampleService*.*(..))")
 	public Object logTime( ProceedingJoinPoint pjp) {
 		
 		long start = System.currentTimeMillis();

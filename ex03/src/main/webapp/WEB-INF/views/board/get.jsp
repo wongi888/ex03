@@ -113,6 +113,11 @@
         <!-- ./ end ul -->
       </div>
       <!-- /.panel .chat-panel -->
+      
+      <div class="panel-footer">
+        
+      </div> 
+      
     </div>
   </div>
   <!-- ./ end row -->
@@ -170,30 +175,6 @@ $(document).ready(function () {
     var pageNum = 1;
     
 	var chatObj = $(".chat");
-
-	chatObj.scroll(function(){
-
-		  var liObj = $(".chat li");
-		  
-		  var liHeight = liObj.outerHeight() + parseInt(liObj.css("margin-bottom")) ; 
-		  
-		  var liCount = liObj.length;
-
-		  var maxHeight = (liCount * liHeight) ;
-		    
-		  var currentScroll = chatObj.height() + chatObj.scrollTop() ;
-		  
-		  if (maxHeight  <= currentScroll   ) {
-		    
-		    console.log("Scroll End");
-		    
-		    //새로운 댓글을 가져오는 부분 
-		    showList(++pageNum);
-		  }
-		    
-		});
-
-	
 	
 	var bnoValue = '<c:out value="${board.bno}"/>';
 	var replyUL = $(".chat");
@@ -202,9 +183,19 @@ $(document).ready(function () {
   
 	function showList(page){
 	  
-	  replyService.getList({bno:bnoValue,page: page|| 1 }, function(list) {
+		console.log("show list " + page );
+		
+	  replyService.getList({bno:bnoValue,page: page|| 1 }, function(replyCnt, list) {
 	    
+		console.log("replyCnt: "+ replyCnt );
+		console.log("list: " + list);
+		  
 	    var str="";
+	    
+	    if(list == null || list.length == 0){
+	    	pageNum--;
+	    	return;
+	    }
 	    
 	    for (var i = 0, len = list.length || 0; i < len; i++) {
 	      str +="<li class='left clearfix' data-rno='"+list[i].rno+"'>";
@@ -212,19 +203,12 @@ $(document).ready(function () {
 	      str +="    <small class='pull-right text-muted'>"+replyService.displayTime(list[i].replyDate)+"</small></div>";
 	      str +="    <p>"+list[i].reply+"</p></div></li>";
 	    }
-	
-		//replyUL.html(str);
-		
-	    if(pageNum == 1){
-	        replyUL.html(str);
-	    }else {
-	        replyUL.append(str);
-	    }
-
-	
-	    });//end function
 	    
-	 }//end showList
+	    chatObj.html(str);
+	
+	  });//end function
+	    
+	}//end showList
 	   
    
     var modal = $(".modal");
@@ -292,7 +276,7 @@ modalRegisterBtn.on("click",function(e){
 	  alert(result);
 	  modal.find("input").val("");
 	  modal.modal("hide");
-	  showList(1);
+	  showList(++pageNum);
 	  
 	});
     
@@ -306,7 +290,7 @@ modalModBtn.on("click", function(e){
 	      
 	  alert(result);
 	  modal.modal("hide");
-	  showList(1);
+	  showList(++pageNum);
 	  
 	});
   
