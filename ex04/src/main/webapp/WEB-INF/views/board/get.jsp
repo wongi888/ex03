@@ -75,13 +75,6 @@
 </div>
 <!-- /.row -->
 
-<style>
-.chat {
-  max-height: 300px;
-  overflow:auto;    
-}
-</style>
-
 
 <div class='row'>
 
@@ -98,21 +91,14 @@
       <div class="panel-body">        
       
         <ul class="chat">
-          <!--  start reply -->
-<!--           <li class="left clearfix" data-rno='12'>
-            <div>
-              <div class="header">
-                <strong class="primary-font">user00</strong> 
-                <small class="pull-right text-muted">2018-01-01 13:13 </small>
-              </div>
-              <p>Good job!</p>
-            </div>
-          </li>
- -->          <!-- end reply -->
-        </ul>
-        <!-- ./ end ul -->
+		</ul>
       </div>
       <!-- /.panel .chat-panel -->
+      
+      <div class="panel-footer">
+        
+      </div> 
+      
     </div>
   </div>
   <!-- ./ end row -->
@@ -170,30 +156,6 @@ $(document).ready(function () {
     var pageNum = 1;
     
 	var chatObj = $(".chat");
-
-	chatObj.scroll(function(){
-
-		  var liObj = $(".chat li");
-		  
-		  var liHeight = liObj.outerHeight() + parseInt(liObj.css("margin-bottom")) ; 
-		  
-		  var liCount = liObj.length;
-
-		  var maxHeight = (liCount * liHeight) ;
-		    
-		  var currentScroll = chatObj.height() + chatObj.scrollTop() ;
-		  
-		  if (maxHeight  <= currentScroll   ) {
-		    
-		    console.log("Scroll End");
-		    
-		    //새로운 댓글을 가져오는 부분 
-		    showList(++pageNum);
-		  }
-		    
-		});
-
-	
 	
 	var bnoValue = '<c:out value="${board.bno}"/>';
 	var replyUL = $(".chat");
@@ -202,29 +164,96 @@ $(document).ready(function () {
   
 	function showList(page){
 	  
-	  replyService.getList({bno:bnoValue,page: page|| 1 }, function(list) {
+	  console.log("show list " + page );
+		
+	  replyService.getList({bno:bnoValue,page: page|| 1 }, function(replyCnt, list) {
 	    
+		console.log("replyCnt: "+ replyCnt );
+		console.log("list: " + list);
+		
+		if(page == -1){
+			pageNum = Math.ceil(replyCnt/10.0);
+			showList(pageNum);
+			return;
+		}
+		  
 	    var str="";
+	    
+	    if(list == null || list.length == 0){
+	    	return;
+	    }
 	    
 	    for (var i = 0, len = list.length || 0; i < len; i++) {
 	      str +="<li class='left clearfix' data-rno='"+list[i].rno+"'>";
-	      str +="  <div><div class='header'><strong class='primary-font'>"+list[i].replyer+"</strong>"; 
+	      str +="  <div><div class='header'><strong class='primary-font'>["+list[i].rno+"] "+list[i].replyer+"</strong>"; 
 	      str +="    <small class='pull-right text-muted'>"+replyService.displayTime(list[i].replyDate)+"</small></div>";
 	      str +="    <p>"+list[i].reply+"</p></div></li>";
 	    }
-	
-		//replyUL.html(str);
-		
-	    if(pageNum == 1){
-	        replyUL.html(str);
-	    }else {
-	        replyUL.append(str);
-	    }
-
-	
-	    });//end function
 	    
-	 }//end showList
+	    chatObj.html(str);
+	    
+	    showReplyPage(replyCnt);
+	
+	  });//end function
+	    
+	}//end showList
+	
+	var replyPageFooter = $(".panel-footer");
+	
+	function showReplyPage(replyCnt){
+		
+		var endNum = Math.ceil(pageNum / 10.0) * 10;  
+		var startNum = endNum - 9; 
+		
+		var prev = startNum != 1;
+		var next = false;
+		
+		if(endNum * 10 >= replyCnt){
+			endNum = Math.ceil(replyCnt/10.0);
+		}
+		
+		if(endNum * 10 < replyCnt){
+			next = true;
+		}
+		
+		var str = "<ul class='pagination pull-right'>";
+		
+		if(prev){
+			str+= "<li class='page-item'><a class='page-link' href='"+(startNum -1)+"'>Previous</a></li>";
+		}
+		
+		 
+		
+		for(var i = startNum ; i <= endNum; i++){
+			
+			var active = pageNum == i? "active":"";
+			
+			str+= "<li class='page-item "+active+" '><a class='page-link' href='"+i+"'>"+i+"</a></li>";
+		}
+		
+		if(next){
+			str+= "<li class='page-item'><a class='page-link' href='"+(endNum + 1)+"'>Next</a></li>";
+		}
+		
+		str += "</ul></div>";
+		
+		console.log(str);
+		
+		replyPageFooter.html(str);
+	}
+	
+	replyPageFooter.on("click","li a", function(e){
+		e.preventDefault();
+		console.log("page click");
+		
+		var targetPageNum = $(this).attr("href");
+		
+		console.log("targetPageNum: " + targetPageNum);
+		
+		pageNum = targetPageNum;
+		
+		showList(pageNum);
+	});
 	   
    
     var modal = $(".modal");
@@ -292,7 +321,8 @@ modalRegisterBtn.on("click",function(e){
 	  alert(result);
 	  modal.find("input").val("");
 	  modal.modal("hide");
-	  showList(1);
+	  
+	  showList(-1);
 	  
 	});
     
@@ -306,7 +336,7 @@ modalModBtn.on("click", function(e){
 	      
 	  alert(result);
 	  modal.modal("hide");
-	  showList(1);
+	  showList(pageNum);
 	  
 	});
   
@@ -321,7 +351,7 @@ modalRemoveBtn.on("click", function (e){
 	      
 		  alert(result);
 		  modal.modal("hide");
-		  showList(1);
+		  showList(pageNum);
 		  
 	});
 	
