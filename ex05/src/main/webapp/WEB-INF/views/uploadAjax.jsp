@@ -15,6 +15,38 @@
 
 <button id='uploadBtn'>Upload</button>
 
+<style>
+
+.uploadResult {
+
+  width:100%;
+  background-color: gray;
+}
+
+.uploadResult ul{
+  display:flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.uploadResult ul li {
+  list-style: none;
+  padding: 10px;
+}
+.uploadResult ul li img{
+  width: 100px;
+}
+
+
+</style>
+
+<div class='uploadResult'> 
+  <ul>
+  
+  </ul>
+</div>
+
 <script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -40,6 +72,30 @@ $(document).ready(function(){
 		return true;
 	}
 	
+	var cloneObj = $(".uploadDiv").clone();
+	
+	var uploadResult = $(".uploadResult ul");
+	
+	function showUploadedFile(uploadResultArr){
+		
+		var str = "";
+		
+		$(uploadResultArr).each(function(i, obj){
+			
+			if(!obj.image){
+				str += "<li><img src='/resources/img/attach.png'>"+obj.fileName+"</li>";
+			}else{
+				//str += "<li>"+ obj.fileName+"</li>";
+				
+				
+				var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+				
+				str += "<li><img src='display?fileName="+fileCallPath+"'><li>";
+			}
+		});
+		
+		uploadResult.append(str);
+	}
 	
 	$("#uploadBtn").on("click", function(e){
 
@@ -49,7 +105,7 @@ $(document).ready(function(){
 		
 		var files = inputFile[0].files;
 		
-		console.log(files);
+		console.log(cloneObj.html());
 		
 		for(var i = 0; i < files.length; i++){
 
@@ -64,12 +120,17 @@ $(document).ready(function(){
 		$.ajax({
 			url: '/uploadAjaxAction',
 			processData: false, 
-			contentType: false,
-			data: formData,
-            type: 'POST',
-            success: function(result){
-                alert("Uploaded");
-            }
+			contentType: false,data: 
+			formData,type: 'POST',
+			dataType:'json',
+		    success: function(result){
+		
+		     	console.log(result);
+		     	
+		     	showUploadedFile(result);
+		     	$(".uploadDiv").html(cloneObj.html());
+		
+		     }
 		}); //$.ajax
 		
 	});	
