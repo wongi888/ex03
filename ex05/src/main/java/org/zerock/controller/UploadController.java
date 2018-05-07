@@ -1,6 +1,9 @@
 package org.zerock.controller;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.log4j.Log4j;
+import net.coobird.thumbnailator.Thumbnailator;
 
 @Controller
 @Log4j
@@ -33,6 +37,25 @@ public class UploadController {
 		
 		return str.replace("-", File.separator);
 	}
+	
+	private boolean checkImageType(File file) {
+		
+		try {
+			String contentType = Files.probeContentType(file.toPath());
+			
+			return contentType.startsWith("image");
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+
+	
+	
 	               
 	@PostMapping("/uploadAjaxAction")
 	public void uploadAjaxPost(MultipartFile[] uploadFile) {
@@ -65,6 +88,17 @@ public class UploadController {
 			try {
 				
 				multipartFile.transferTo(saveFile);
+				
+				//check image type file 
+				if(checkImageType(saveFile)) {
+					
+					FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_"+ uploadFileName)); 
+					
+					Thumbnailator.createThumbnail(multipartFile.getInputStream(), thumbnail, 100, 100); 
+					
+					thumbnail.close();
+				}
+				
 			} catch (Exception e) {
 				log.error(e.getMessage());
 			}//end catch
