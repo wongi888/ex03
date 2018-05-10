@@ -131,6 +131,17 @@ var replyService = (function() {
 		          ].join('');
 		   }
 		 };
+		 
+		 
+		 function setCSRF(tokenValue){
+			
+			 $.ajaxSetup({
+		            headers:
+		            { 'X-CSRF-TOKEN': tokenValue }
+		     });
+			 
+		 };
+		 
 
 		  return {
 		    add : add,
@@ -138,7 +149,8 @@ var replyService = (function() {
 		    getList:getList,
 		    remove:remove,
 		    update:update,
-		    displayTime:displayTime
+		    displayTime:displayTime,
+		    setCSRF:setCSRF
 		  };
 
 	

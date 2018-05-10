@@ -20,9 +20,5 @@ public class CustomUser extends User {
 		log.info("username: " + username);
 		log.info("password: " + password);
 	}
-	
-	public CustomUser(MemberVO member) {
-		super(member.getMid(), member.getMpw(), Collections.singletonList(new SimpleGrantedAuthority(member.getGrade())) );
-	}
 
 }

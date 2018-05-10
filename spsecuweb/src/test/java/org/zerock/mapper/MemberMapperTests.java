@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.zerock.domain.MemberAuthVO;
 import org.zerock.domain.MemberVO;
 
 import lombok.Setter;
@@ -33,29 +34,55 @@ public class MemberMapperTests {
 			member.setMpw("pw" + i);
 			member.setMname("USER" + i);
 			
-			if(i < 80) {
-				member.setGrade("ROLE_USER");
-			}else if(i < 90) {
-				member.setGrade("ROLE_MANAGER");
-			}else {
-				member.setGrade("ROLE_ADMIN");
-			}
-			
 			mapper.create(member);
 			
+			
+			if(true) {
+			
+				MemberAuthVO vo = new MemberAuthVO();
+				vo.setMid("user" +i);
+				vo.setAuth("ROLE_USER");
+				mapper.createAuth(vo);
+
+			}
+			
+			if(i >= 80) {
+				
+				MemberAuthVO vo = new MemberAuthVO();
+				vo.setMid("user" +i);
+				vo.setAuth("ROLE_MANGER");
+				mapper.createAuth(vo);
+			}
+			
+			if(i >= 90) {
+				
+				MemberAuthVO vo = new MemberAuthVO();
+				vo.setMid("user" +i);
+				vo.setAuth("ROLE_ADMIN");
+				mapper.createAuth(vo);
+			}
 		}
 	}
 	
 	@Test
-	public void testCryptPassword() {
+	public void testRead() {
+		
+		log.info(mapper.read("user99"));
+	}
+	
+	@Test
+	public void testUpdate() {
 		
 		for(int i = 0; i < 100; i++) {
+		
+			String mid = "user" +i;
+			String enpw = pwEncoder.encode("pw" + i);
 			
-			mapper.crpytPassword("user"+i, pwEncoder.encode("pw"+i));
+			mapper.updatePassword(mid, enpw);
+			
 			
 		}
 		
 	}
-	
 	
 }

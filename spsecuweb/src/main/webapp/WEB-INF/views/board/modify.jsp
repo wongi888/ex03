@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@include file="../includes/header.jsp"%>
 
 
@@ -54,6 +55,8 @@
 					<button type="submit" data-oper='modify' class="btn btn-default">Modify</button>
 					<button type="submit" data-oper='remove' class="btn btn-danger">Remove</button>
 					<button type="submit" data-oper='list' class="btn btn-info">List</button>
+										<!-- Spring Security CRSF TOKEN  -->
+					<sec:csrfInput />
 				</form>
 
 

@@ -1,6 +1,7 @@
 package org.zerock.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,7 @@ import lombok.extern.log4j.Log4j;
 @Controller
 @Log4j
 @RequestMapping("/board/*")
+@PreAuthorize("isAuthenticated()")
 public class BoardController {
 
 	@Setter(onMethod = @__({ @Autowired }))
@@ -42,6 +44,7 @@ public class BoardController {
 	// }
 
 	@GetMapping("/list")
+	@PreAuthorize("permitAll")
 	public void list(Criteria cri, Model model) {
 
 		log.info("list: " + cri);
@@ -55,8 +58,7 @@ public class BoardController {
 		model.addAttribute("pageMaker", new PageDTO(cri, total));
 	}
 
-	@GetMapping("/register")
-	@PreAuthorize("isAuthenticated()")	
+	@GetMapping("/register")	
 	public void register() {
 
 	}

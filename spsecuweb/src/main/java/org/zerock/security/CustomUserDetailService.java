@@ -1,14 +1,13 @@
 package org.zerock.security;
 
-import java.util.Collections;
-
-import javax.swing.event.ListSelectionEvent;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.zerock.domain.MemberVO;
 import org.zerock.mapper.MemberMapper;
 
 import lombok.Setter;
@@ -26,9 +25,16 @@ public class CustomUserDetailService implements UserDetailsService {
 		
 		
 		log.info("loadUserByUsername: " + username);
+		
+		
 		log.info(mapper);
 		
-		return new CustomUser(mapper.read(username));
+		MemberVO vo = mapper.read(username);
+		
+		CustomUser user = new CustomUser(vo.getMid(), vo.getMpw(), 
+				vo.getAuths().stream().map(ele -> new SimpleGrantedAuthority(ele.getAuth())).collect(Collectors.toList()) );
+
+		return user;
 	}
 
 }

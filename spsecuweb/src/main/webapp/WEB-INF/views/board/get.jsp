@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@include file="../includes/header.jsp"%>
 
 
@@ -104,8 +105,6 @@
   <!-- ./ end row -->
 </div>
 
-
-
 <!-- Modal -->
       <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
         aria-labelledby="myModalLabel" aria-hidden="true">
@@ -153,6 +152,9 @@
 $(document).ready(function () {
 	
 
+	var csrfToken = '${_csrf.token}';
+	var loginUserName = '<sec:authentication property="principal.username"/>';
+	
     var pageNum = 1;
     
 	var chatObj = $(".chat");
@@ -268,6 +270,7 @@ $(document).ready(function () {
     $("#addReplyBtn").on("click", function(e){
       
       modal.find("input").val("");
+      modal.find("input[name='replyer']").val(loginUserName).attr("readonly","readonly");
       modalInputReplyDate.closest("div").hide();
       modal.find("button[id !='modalCloseBtn']").hide();
       
@@ -315,7 +318,8 @@ modalRegisterBtn.on("click",function(e){
 	      bno:bnoValue
 	    };
 	
-	
+	//csrf
+	replyService.setCSRF(csrfToken);
 	replyService.add(reply, function(result){
 	  
 	  alert(result);
@@ -331,7 +335,9 @@ modalRegisterBtn.on("click",function(e){
 modalModBtn.on("click", function(e){
   
 	var reply = {rno:modal.data("rno"), reply: modalInputReply.val()};
-	
+	//csrf
+	replyService.setCSRF(csrfToken);
+
 	replyService.update(reply, function(result){
 	      
 	  alert(result);
@@ -347,6 +353,9 @@ modalRemoveBtn.on("click", function (e){
 	
 	var rno = modal.data("rno");
 	
+	//csrf
+	replyService.setCSRF(csrfToken);
+
 	replyService.remove(rno, function(result){
 	      
 		  alert(result);
