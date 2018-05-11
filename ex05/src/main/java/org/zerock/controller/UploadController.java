@@ -3,6 +3,7 @@ package org.zerock.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,6 +64,35 @@ public class UploadController {
 
 		return false;
 	}
+	
+	
+	@GetMapping(value="/download" , produces=MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	@ResponseBody
+	public ResponseEntity<Resource> downloadFile(String fileName){
+	
+		log.info("download file: " + fileName);
+		
+		Resource resource  = new FileSystemResource("c:\\upload\\" + fileName);
+		
+		log.info("resource: " + resource);
+		
+		String resourceName = resource.getFilename();
+				
+		HttpHeaders headers = new HttpHeaders();
+		try {
+			headers.add("Content-Disposition", "attachment; filename="+new String(resourceName.getBytes("UTF-8"),"ISO-8859-1"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return new ResponseEntity<Resource>(resource, headers,HttpStatus.OK);
+	}
+	
+	
+	
+	
+	
 
 	@PostMapping(value = "/uploadAjaxAction", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
@@ -226,3 +256,7 @@ public class UploadController {
 		log.info("upload ajax");
 	}
 }
+
+
+
+
