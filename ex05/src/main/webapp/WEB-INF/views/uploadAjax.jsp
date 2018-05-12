@@ -7,6 +7,28 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+
+<style>
+.bigPictureWrapper {
+  position: absolute;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  top:0%;
+  width:100%;
+  height:100%;
+  background-color: gray; 
+  z-index: 100;
+}
+
+.bigPicture {
+  position: relative;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
+
 </head>
 <body>
 <h1>Upload with Ajax</h1>
@@ -49,23 +71,7 @@
   </ul>
 </div>
 
-<style>
-.bigPictureWrapper {
-  position: absolute;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  top:0%;
-  width:100%;
-  height:100%;
-  background-color: gray; 
-  z-index: 100;
-}
 
-.bigPicture {
-  
-}
-</style>
 
 <div class='bigPictureWrapper'>
   <div class='bigPicture'>
@@ -81,10 +87,14 @@
 
 function showImage(fileCallPath){
 	
-	console.log(fileCallPath);
+	alert(fileCallPath);
 	
-	$(".bigPicture").html("<img src='/display?fileName="+fileCallPath+"'>");
-	$(".bigPictureWrapper").css("display","flex").show("slow");
+	$(".bigPictureWrapper").css("display","flex").show();
+	
+	$(".bigPicture")
+	.html("<img src='/display?fileName="+fileCallPath+"'>")
+	.animate({width:'100%', height: '100%'}, 20000);
+	
 }
 
 
@@ -127,8 +137,6 @@ $(document).ready(function(){
 				var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
 				
 				var originPath = obj.uploadPath+ "\\"+obj.uuid +"_"+obj.fileName;
-				
-				console.log(originPath);
 				
 				originPath = originPath.replace(new RegExp(/\\/g),"/");
 				
