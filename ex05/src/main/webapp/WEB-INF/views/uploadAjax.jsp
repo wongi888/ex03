@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>    
     
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -121,31 +121,42 @@ $(document).ready(function(){
 	
 	var uploadResult = $(".uploadResult ul");
 	
+	  
 	function showUploadedFile(uploadResultArr){
-		
-		var str = "";
-		
-		$(uploadResultArr).each(function(i, obj){
-			
-			if(!obj.image){
-				
-				var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);
-				
-				str += "<li><a href='/download?fileName="+fileCallPath+"'><img src='/resources/img/attach.png'>"+obj.fileName+"</a></li>"
-			}else{
-				
-				var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
-				
-				var originPath = obj.uploadPath+ "\\"+obj.uuid +"_"+obj.fileName;
-				
-				originPath = originPath.replace(new RegExp(/\\/g),"/");
-				
-				str += "<li><a href=\"javascript:showImage(\'"+originPath+"\')\"><img src='display?fileName="+fileCallPath+"'></a><li>";
-			}
-		});
-		
-		uploadResult.append(str);
+	
+	  var str = "";
+	  
+	  $(uploadResultArr).each(function(i, obj){
+	    
+	    if(!obj.image){
+	      
+	      var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);
+	      
+	      var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+	      
+	      str += "<li><div><a href='/download?fileName="+fileCallPath+"'>"+
+	          "<img src='/resources/img/attach.png'>"+obj.fileName+"</a>"+
+	          "<span data-file=\'"+fileCallPath+"\' data-type='file'> x </span>"+
+	          "<div></li>"
+	          
+	    }else{
+	      
+	      var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+	      
+	      var originPath = obj.uploadPath+ "\\"+obj.uuid +"_"+obj.fileName;
+	      
+	      originPath = originPath.replace(new RegExp(/\\/g),"/");
+	      
+	      str += "<li><a href=\"javascript:showImage(\'"+originPath+"\')\">"+
+	             "<img src='display?fileName="+fileCallPath+"'></a>"+
+	             "<span data-file=\'"+fileCallPath+"\' data-type='image'> x </span>"+
+	             "<li>";
+	    }
+	  });
+	  
+	  uploadResult.append(str);
 	}
+
 	
 	
 	$("#uploadBtn").on("click", function(e){
