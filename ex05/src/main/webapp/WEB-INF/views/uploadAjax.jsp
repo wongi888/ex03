@@ -157,6 +157,24 @@ $(document).ready(function(){
 	  uploadResult.append(str);
 	}
 
+	$(".uploadResult").on("click","span", function(e){
+	    
+	    var targetFile = $(this).data("file");
+	    var type = $(this).data("type");
+	    console.log(targetFile);
+	    
+	    $.ajax({
+	      url: '/deleteFile',
+	      data: {fileName: targetFile, type:type},
+	      dataType:'text',
+	      type: 'POST',
+	        success: function(result){
+	           alert(result);
+	         }
+	    }); //$.ajax
+	    
+	  });
+
 	
 	
 	$("#uploadBtn").on("click", function(e){
@@ -196,6 +214,14 @@ $(document).ready(function(){
 		}); //$.ajax
 		
 	});	
+	
+	$(".bigPictureWrapper").on("click", function(e){
+	    $(".bigPicture").animate({width:'0%', height: '0%'}, 1000);
+	    setTimeout(function(){
+	      $('.bigPictureWrapper').hide();
+	    }, 1000);
+	  });
+
 });
 </script>  
   
