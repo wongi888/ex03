@@ -76,6 +76,8 @@ public class BoardController {
 
 		return "redirect:/board/list";
 	}
+	
+	
 
 	// @GetMapping("/get")
 	// public void get(@RequestParam("bno") Long bno, Model model) {
