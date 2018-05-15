@@ -159,6 +159,8 @@ $(document).ready(function(e){
 			
 		});
 		
+		
+		
 		formObj.append(str).submit();
 		
 	});
