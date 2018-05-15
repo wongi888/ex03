@@ -62,7 +62,13 @@ public class BoardController {
 	@PostMapping("/register")
 	public String register(BoardVO board, RedirectAttributes rttr) {
 
+		log.info("==========================");
+		
 		log.info("register: " + board);
+		
+		board.getAttachList().forEach(attach -> log.info(attach));
+		
+		log.info("==========================");
 
 		service.register(board);
 
