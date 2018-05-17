@@ -81,26 +81,6 @@
 
 <!-- -------------------------------------------------------------- -->
 
-<style>
-.bigPictureWrapper {
-  position: absolute;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  top:0%;
-  width:50%;
-  height:100%;
-  background-color: gray; 
-}
-
-.bigPicture {
-  position: relative;
-  display:flex;
-  justify-content: center;
-  align-items: center;
-}
-</style>
-
 <div class='bigPictureWrapper'>
   <div class='bigPicture'>
   </div>
