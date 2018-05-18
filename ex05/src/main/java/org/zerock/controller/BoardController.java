@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -211,11 +212,31 @@ public class BoardController {
 	// return "redirect:/board/list";
 	// }
 
+//	@PostMapping("/modify")
+//	public String modify(BoardVO board, Criteria cri, RedirectAttributes rttr) {
+//		log.info("modify:" + board);
+//
+//		if (service.modify(board)) {
+//			rttr.addFlashAttribute("result", "success");
+//		}
+//		return "redirect:/board/list" + cri.getListLink();
+//	}
+	
 	@PostMapping("/modify")
 	public String modify(BoardVO board, Criteria cri, RedirectAttributes rttr) {
 		log.info("modify:" + board);
+		
+		List<BoardAttachVO> oldAttachList = service.getAttachList(board.getBno());
 
+		List<BoardAttachVO> modAttachList = board.getAttachList();
+		
+		List<BoardAttachVO> deleteAttachList = 
+				oldAttachList.stream().filter(attach -> modAttachList.contains(attach) == false).collect(Collectors.toList());
+		
 		if (service.modify(board)) {
+			
+			deleteFiles(deleteAttachList);
+			
 			rttr.addFlashAttribute("result", "success");
 		}
 		return "redirect:/board/list" + cri.getListLink();

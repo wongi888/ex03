@@ -49,12 +49,33 @@ public class BoardServiceImpl implements BoardService {
 
 	}
 
+//	@Override
+//	public boolean modify(BoardVO board) {
+//
+//		log.info("modify......" + board);
+//
+//		return mapper.update(board) == 1;
+//	}
+
+	@Transactional
 	@Override
 	public boolean modify(BoardVO board) {
 
 		log.info("modify......" + board);
-
-		return mapper.update(board) == 1;
+		
+		attachMapper.deleteAll(board.getBno());
+		
+		boolean modifyResult = mapper.update(board) == 1; 
+		if(modifyResult) {
+			
+			board.getAttachList().forEach(attach ->{
+				
+				attach.setBno(board.getBno());
+				attachMapper.insert(attach);
+			});
+		}
+		
+		return modifyResult;
 	}
 
 	@Transactional
@@ -99,6 +120,14 @@ public class BoardServiceImpl implements BoardService {
 		log.info("get Attach list by bno" + bno);
 		
 		return attachMapper.findByBno(bno);
+	}
+
+	@Override
+	public void removeAttach(Long bno) {
+		
+		log.info("remove all attach files");
+		
+		attachMapper.deleteAll(bno);
 	}
 
 }

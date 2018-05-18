@@ -1,8 +1,10 @@
 package org.zerock.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(of="uuid")
 public class BoardAttachVO {
 
 	private String uuid;

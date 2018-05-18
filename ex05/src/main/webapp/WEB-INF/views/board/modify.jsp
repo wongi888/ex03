@@ -173,23 +173,13 @@ $(document).ready(function() {
 		
 		console.log("delete file");
 	    
-		var targetFile = $(this).data("file");
-		var type = $(this).data("type");
+		if(confirm("Remove this file? ")){
 		
-		var targetLi = $(this).closest("li");
-		
-		$.ajax({
-		  url: '/deleteFile',
-		  data: {fileName: targetFile, type:type},
-		  dataType:'text',
-		  type: 'POST',
-		    success: function(result){
-		       alert(result);
-		       
-		       targetLi.remove();
-		     }
-		}); //$.ajax
-	 });
+			var targetLi = $(this).closest("li");
+			
+			targetLi.remove();
+		}
+	});
 	
 	
 	
@@ -298,8 +288,11 @@ $(document).ready(function() {
     console.log(operation);
     
     if(operation === 'remove'){
+    	
       formObj.attr("action", "/board/remove");
+      
     }else if(operation === 'list'){
+      
     	//move to list
       formObj.attr("action", "/board/list").attr("method","get");
       
@@ -315,6 +308,25 @@ $(document).ready(function() {
       formObj.append(keywordTag);
       formObj.append(typeTag);
 
+    }else if(operation === 'modify'){
+    	
+		console.log("submit clicked");
+		
+		var str = "";
+		
+		$(".uploadResult ul li").each(function(i, obj){
+			
+			var jobj = $(obj);
+			
+			console.dir(jobj);
+			
+			str += "<input type='hidden' name='attachList["+i+"].fileName' value='"+jobj.data("filename")+"'>";
+			str += "<input type='hidden' name='attachList["+i+"].uuid' value='"+jobj.data("uuid")+"'>";
+			str += "<input type='hidden' name='attachList["+i+"].uploadPath' value='"+jobj.data("path")+"'>";
+			str += "<input type='hidden' name='attachList["+i+"].fileType' value='"+ jobj.data("type")+"'>";
+			
+		});
+		formObj.append(str).submit();
     }
     
     
