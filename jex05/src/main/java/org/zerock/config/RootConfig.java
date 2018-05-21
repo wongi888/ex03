@@ -1,4 +1,4 @@
-package org.zerock.config;
+ 	 package org.zerock.config;
 
 import javax.sql.DataSource;
 
@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -17,9 +18,10 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@ComponentScan(basePackages= {"org.zerock.service","org.zerock.aop"})
+@ComponentScan(basePackages= {"org.zerock.service","org.zerock.aop", "org.zerock.task"})
 @EnableAspectJAutoProxy
 @EnableTransactionManagement
+@EnableScheduling
 @MapperScan(basePackages= {"org.zerock.mapper"})
 public class RootConfig {
 

@@ -1,8 +1,6 @@
 package org.zerock.task;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -41,11 +39,11 @@ public class FileCheckTask  {
 		return str.replace("-", File.separator);
 	}
 	
-	@Scheduled(cron="0 2 * * * *")
+	@Scheduled(cron="0 * 1 * * *")
 	public void checkFiles()throws Exception{
 		
 		log.warn("File Check Task run.................");
-		
+		log.warn(new Date());
 		//file list in database 
 		List<BoardAttachVO> fileList = attachMapper.getOldFiles();
 		
@@ -64,21 +62,22 @@ public class FileCheckTask  {
 		fileListPaths.forEach(p -> log.warn(p));
 		
 		//files in yesterday directory 
-		Path targetPath = Paths.get("C:\\upload", getFolderYesterDay());
+		File targetDir = Paths.get("C:\\upload", getFolderYesterDay()).toFile();
 		
-		List<Path> removeFilePaths = Files.walk(targetPath)
-				.filter(file -> fileListPaths.contains(file) == false)
-				.collect(Collectors.toList());
+		File[] removeFiles = targetDir.listFiles(file ->  fileListPaths.contains(file.toPath()) == false);
 		
-		
-		removeFilePaths.forEach(file -> {
-			try {
-				Files.deleteIfExists(file);
-			} catch (IOException e) {
-				log.warn(e.getMessage());
-			}
-		});
+
+		log.warn("-----------------------------------------");
+		for (File file : removeFiles) {
+			
+			log.warn(file.getAbsolutePath());
+			
+			file.delete();
+			
+		}		
 	}
 }
+
+
 
 
